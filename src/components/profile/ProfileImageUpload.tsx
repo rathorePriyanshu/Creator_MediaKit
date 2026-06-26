@@ -58,7 +58,6 @@ export default function ProfileImageUpload() {
 
                                     if (!file) return;
 
-                                    // Validate selected file type is an image
                                     if (!file.type.startsWith("image/")) {
                                         setError("profile.profileImageUrl", {
                                             type: "manual",
@@ -67,7 +66,7 @@ export default function ProfileImageUpload() {
                                         return;
                                     }
 
-                                    // Limit upload size to 2 MB (2,097,152 bytes)
+
                                     const maxSizeBytes = 2 * 1024 * 1024;
                                     if (file.size > maxSizeBytes) {
                                         setError("profile.profileImageUrl", {
@@ -76,8 +75,6 @@ export default function ProfileImageUpload() {
                                         });
                                         return;
                                     }
-
-                                    // Clear validation errors if validations pass
                                     clearErrors("profile.profileImageUrl");
 
                                     const reader = new FileReader();
