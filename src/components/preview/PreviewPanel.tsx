@@ -14,7 +14,6 @@ export default function PreviewPanel() {
   return (
     <div className="mx-auto max-w-xl space-y-6">
 
-      {/* Status */}
 
       <div className="flex items-center justify-between">
 
@@ -34,7 +33,6 @@ export default function PreviewPanel() {
 
       </div>
 
-      {/* Creator Card */}
 
       <Card className="border-zinc-800 bg-zinc-900 p-8">
 
@@ -48,6 +46,7 @@ export default function PreviewPanel() {
                 alt={profile.fullName}
                 fill
                 className="object-cover"
+                unoptimized
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-500">
@@ -58,16 +57,16 @@ export default function PreviewPanel() {
           </div>
 
           <h2 className="mt-5 text-2xl font-bold">
-            {profile.fullName || "Your Name"}
+            {profile.fullName || "Creator Name"}
           </h2>
 
           <p className="mt-1 text-sm text-indigo-400">
-            @{profile.username || "username"}
+            @{profile.username || "creator"}
           </p>
 
           <p className="mt-4 text-center text-sm leading-6 text-zinc-400">
             {profile.bio ||
-              "Your creator bio will appear here."}
+              "Tell brands who you are..."}
           </p>
 
         </div>

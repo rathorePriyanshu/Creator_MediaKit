@@ -7,7 +7,6 @@ export const PlatformSchema = z.enum([
     "x",
 ]);
 
-
 export const CreatorProfileSchema = z.object({
     username: z
         .string()
@@ -29,9 +28,25 @@ export const CreatorProfileSchema = z.object({
         .max(500),
     profileImageUrl: z
         .string()
-        .url()
         .optional()
-        .or(z.literal("")),
+        .or(z.literal(""))
+        .refine(
+            (val) => {
+                if (!val) return true;
+                if (val.startsWith("data:image/")) {
+                    return /^data:image\/[a-zA-Z+-]+;base64,/.test(val);
+                }
+                try {
+                    const parsed = new URL(val);
+                    return parsed.protocol === "http:" || parsed.protocol === "https:";
+                } catch {
+                    return false;
+                }
+            },
+            {
+                message: "Must be a valid HTTP/HTTPS URL or base64 image data",
+            }
+        ),
     themeColor: z
         .string()
         .regex(/^#[0-9A-Fa-f]{6}$/),
@@ -54,22 +69,18 @@ export const MetricSchema = z.object({
 
 export const RateCardSchema = z.object({
     id: z.string(),
-
     deliverable: z
         .string()
         .trim()
         .min(1)
         .max(100),
-
     description: z
         .string()
         .trim()
         .max(500),
-
     basePrice: z
         .number()
         .positive(),
-
     turnaroundDays: z
         .number()
         .int()
