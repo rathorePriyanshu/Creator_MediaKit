@@ -3,9 +3,9 @@ import PublicPreview from "@/components/preview/PublicPreview";
 import { getBaseUrl } from "@/lib/getBase";
 
 interface Props {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 async function getCreator(username: string) {
@@ -29,7 +29,9 @@ async function getCreator(username: string) {
 export default async function PublicKitPage({
   params,
 }: Props) {
-  const response = await getCreator(params.username);
+  const { username } = await params;
+
+  const response = await getCreator(username);
 
   if (!response?.success || !response.data) {
     notFound();
