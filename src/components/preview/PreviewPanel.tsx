@@ -8,8 +8,21 @@ import { useCreatorKit } from "@/hooks/useCreatorKit";
 
 export default function PreviewPanel() {
   const { creatorKit, isSaving, lastSavedAt } = useCreatorKit();
-
   const { profile, metrics, rateCards } = creatorKit;
+
+  function formatFollowers(value: number | null | undefined) {
+    const safeVal = Math.max(0, value ?? 0);
+
+    if (safeVal >= 1_000_000) {
+      return `${(safeVal / 1_000_000).toFixed(1)}M`;
+    }
+
+    if (safeVal >= 1000) {
+      return `${(safeVal / 1000).toFixed(1)}K`;
+    }
+
+    return safeVal.toString();
+  }
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
@@ -76,52 +89,48 @@ export default function PreviewPanel() {
       {/* Metrics */}
 
       <Card className="border-zinc-800 bg-zinc-900 p-6">
-
         <h3 className="mb-4 text-lg font-semibold">
-          Social Metrics
+          Verified Metrics
         </h3>
 
         {metrics.length === 0 ? (
-          <p className="text-sm text-zinc-500">
-            No metrics added yet.
-          </p>
+          <div className="rounded-lg border border-dashed border-zinc-700 p-8 text-center">
+            <p className="text-sm text-zinc-500">
+              Add your first platform from the editor.
+            </p>
+          </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
-
+          <div className="grid gap-4 sm:grid-cols-2">
             {metrics.map((metric) => (
-
               <div
                 key={metric.id}
-                className="rounded-lg border border-zinc-700 bg-zinc-800 p-4"
+                className="rounded-xl border border-zinc-700 bg-zinc-800 p-5 transition-all"
               >
-
                 <div className="flex items-center justify-between">
-
-                  <p className="capitalize font-medium">
+                  <h4 className="font-semibold capitalize">
                     {metric.platform}
-                  </p>
+                  </h4>
 
-                  <Badge>
-                    {metric.engagementRate}%
-                  </Badge>
-
+                  <span className="rounded-full bg-indigo-600/20 px-2 py-1 text-xs text-indigo-400">
+                    {Math.min(100, Math.max(0, metric.engagementRate ?? 0))}%
+                  </span>
                 </div>
 
-                <p className="mt-3 text-xl font-bold">
-                  {metric.followers.toLocaleString()}
+                <p className="mt-4 text-2xl font-bold">
+                  {formatFollowers(metric.followers)}
                 </p>
 
-                <p className="text-xs text-zinc-500">
+                <p className="text-sm text-zinc-500">
                   Followers
                 </p>
 
+                <p className="mt-3 text-xs text-zinc-400">
+                  @{metric.username}
+                </p>
               </div>
-
             ))}
-
           </div>
         )}
-
       </Card>
 
       {/* Rate Cards */}
