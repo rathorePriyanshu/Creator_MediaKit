@@ -1,8 +1,15 @@
+import SplitLayout from "@/components/layout/SplitLayout";
+import EditorPanel from "@/components/editor/EditorPanel";
+import PreviewPanel from "@/components/preview/PreviewPanel";
+import CreatorKitProvider from "@/providers/CreatorKitProvider";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="bg-blue-700">
-      Hello
-    </div>
+    <CreatorKitProvider>
+      <SplitLayout
+        editor={<EditorPanel />}
+        preview={<PreviewPanel />}
+      />
+    </CreatorKitProvider>
   );
 }

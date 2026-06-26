@@ -4,7 +4,7 @@ export interface CreatorProfile {
     username: string;
     fullName: string;
     bio: string;
-    profileImageUrl: string;
+    profileImageUrl?: string;
     themeColor: string;
 }
 

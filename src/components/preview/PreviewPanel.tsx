@@ -1,3 +1,181 @@
+"use client";
+
+import Image from "next/image";
+
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useCreatorKit } from "@/hooks/useCreatorKit";
+
 export default function PreviewPanel() {
-  return null;
+  const { creatorKit, isSaving, lastSavedAt } = useCreatorKit();
+
+  const { profile, metrics, rateCards } = creatorKit;
+
+  return (
+    <div className="mx-auto max-w-xl space-y-6">
+
+      {/* Status */}
+
+      <div className="flex items-center justify-between">
+
+        <Badge
+          className="border-indigo-500 text-indigo-400"
+        >
+          Live Preview
+        </Badge>
+
+        <span className="text-xs text-zinc-500">
+          {isSaving
+            ? "Saving..."
+            : lastSavedAt
+              ? `Saved ${lastSavedAt.toLocaleTimeString()}`
+              : "Not Saved"}
+        </span>
+
+      </div>
+
+      {/* Creator Card */}
+
+      <Card className="border-zinc-800 bg-zinc-900 p-8">
+
+        <div className="flex flex-col items-center">
+
+          <div className="relative h-28 w-28 overflow-hidden rounded-full border border-zinc-700">
+
+            {profile.profileImageUrl ? (
+              <Image
+                src={profile.profileImageUrl}
+                alt={profile.fullName}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-500">
+                No Image
+              </div>
+            )}
+
+          </div>
+
+          <h2 className="mt-5 text-2xl font-bold">
+            {profile.fullName || "Your Name"}
+          </h2>
+
+          <p className="mt-1 text-sm text-indigo-400">
+            @{profile.username || "username"}
+          </p>
+
+          <p className="mt-4 text-center text-sm leading-6 text-zinc-400">
+            {profile.bio ||
+              "Your creator bio will appear here."}
+          </p>
+
+        </div>
+
+      </Card>
+
+      {/* Metrics */}
+
+      <Card className="border-zinc-800 bg-zinc-900 p-6">
+
+        <h3 className="mb-4 text-lg font-semibold">
+          Social Metrics
+        </h3>
+
+        {metrics.length === 0 ? (
+          <p className="text-sm text-zinc-500">
+            No metrics added yet.
+          </p>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+
+            {metrics.map((metric) => (
+
+              <div
+                key={metric.id}
+                className="rounded-lg border border-zinc-700 bg-zinc-800 p-4"
+              >
+
+                <div className="flex items-center justify-between">
+
+                  <p className="capitalize font-medium">
+                    {metric.platform}
+                  </p>
+
+                  <Badge>
+                    {metric.engagementRate}%
+                  </Badge>
+
+                </div>
+
+                <p className="mt-3 text-xl font-bold">
+                  {metric.followers.toLocaleString()}
+                </p>
+
+                <p className="text-xs text-zinc-500">
+                  Followers
+                </p>
+
+              </div>
+
+            ))}
+
+          </div>
+        )}
+
+      </Card>
+
+      {/* Rate Cards */}
+
+      <Card className="border-zinc-800 bg-zinc-900 p-6">
+
+        <h3 className="mb-4 text-lg font-semibold">
+          Commercial Rate Cards
+        </h3>
+
+        {rateCards.length === 0 ? (
+          <p className="text-sm text-zinc-500">
+            No commercial packages added yet.
+          </p>
+        ) : (
+          <div className="space-y-4">
+
+            {rateCards.map((card) => (
+
+              <div
+                key={card.id}
+                className="rounded-lg border border-zinc-700 bg-zinc-800 p-5"
+              >
+
+                <div className="flex items-center justify-between">
+
+                  <h4 className="font-semibold">
+                    {card.deliverable}
+                  </h4>
+
+                  <span className="rounded-md bg-indigo-600 px-3 py-1 text-sm font-semibold">
+                    ₹{card.basePrice}
+                  </span>
+
+                </div>
+
+                <p className="mt-3 text-sm text-zinc-400">
+                  {card.description}
+                </p>
+
+                <p className="mt-4 text-xs text-zinc-500">
+                  Delivery in {card.turnaroundDays} day(s)
+                </p>
+
+              </div>
+
+            ))}
+
+          </div>
+        )}
+
+      </Card>
+
+    </div>
+  );
 }
