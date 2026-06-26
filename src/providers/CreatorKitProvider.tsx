@@ -1,11 +1,13 @@
 "use client";
 
 import { ReactNode, useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CreatorKitInput, CreatorKitSchema, } from "@/lib/validations";
+
 import { DEFAULT_CREATOR_KIT } from "@/constants/defaults";
-import { CreatorKitInput, CreatorKitSchema } from "@/lib/validations";
 import { useCreatorKitStore } from "@/store/creatorKitStore";
+import { useAutosave } from "@/hooks/useAutosave";
 
 interface CreatorKitProviderProps {
     children: ReactNode;
@@ -14,9 +16,6 @@ interface CreatorKitProviderProps {
 export default function CreatorKitProvider({
     children,
 }: CreatorKitProviderProps) {
-    const setCreatorKit = useCreatorKitStore(
-        (state) => state.setCreatorKit
-    );
 
     const methods = useForm<CreatorKitInput>({
         resolver: zodResolver(CreatorKitSchema),
@@ -24,13 +23,20 @@ export default function CreatorKitProvider({
         mode: "onChange",
     });
 
-    useEffect(() => {
-        const subscription = methods.watch((values) => {
-            setCreatorKit(values as CreatorKitInput);
-        });
+    const values = useWatch({
+        control: methods.control,
+    });
 
-        return () => subscription.unsubscribe();
-    }, [methods, setCreatorKit]);
+    const setCreatorKit =
+        useCreatorKitStore(
+            state => state.setCreatorKit
+        );
+
+    useEffect(() => {
+        setCreatorKit(values as CreatorKitInput);
+    }, [values, setCreatorKit]);
+
+    useAutosave(values as CreatorKitInput, methods.control);
 
     return (
         <FormProvider {...methods}>

@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCreatorKit } from "@/hooks/useCreatorKit";
+import SaveStatus from "../status/SaveStatus";
 
 export default function PreviewPanel() {
   const { creatorKit, isSaving, lastSavedAt } = useCreatorKit();
@@ -40,13 +40,7 @@ export default function PreviewPanel() {
           Live Preview
         </Badge>
 
-        <span className="text-xs text-zinc-500">
-          {isSaving
-            ? "Saving..."
-            : lastSavedAt
-              ? `Saved ${lastSavedAt.toLocaleTimeString()}`
-              : "Not Saved"}
-        </span>
+        <SaveStatus />
 
       </div>
 
