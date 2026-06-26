@@ -8,49 +8,22 @@ import MetricCard from "./MetricCard";
 import { CreatorKitInput } from "@/lib/validations";
 
 export default function MetricsForm() {
-    const { control } =
-        useFormContext<CreatorKitInput>();
+    const { control } = useFormContext<CreatorKitInput>();
 
-    const { fields, append, remove } =
-        useFieldArray({
-            control,
-            name: "metrics",
-        });
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "metrics",
+        keyName: "fieldId",
+    });
 
     return (
-        <div className="space-y-5">
-
-            <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-            >
-                <Button
-                    type="button"
-                    className="w-full"
-                    onClick={() =>
-                        append({
-                            id: crypto.randomUUID(),
-                            platform: "instagram",
-                            username: "",
-                            followers: 0,
-                            engagementRate: 0,
-                        })
-                    }
-                >
-                    <Plus className="mr-2 h-4 w-4" />
-
-                    Add Platform
-
-                </Button>
-            </motion.div>
-
+        <div className="space-y-6">
             <div className="space-y-5 flex flex-col">
                 <AnimatePresence mode="popLayout">
                     {fields.map((field, index) => (
                         <motion.div
                             layout
-                            key={field.id}
+                            key={field.fieldId}
                             initial={{ opacity: 0, scale: 0.95, y: 12 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: -12 }}
@@ -65,6 +38,29 @@ export default function MetricsForm() {
                 </AnimatePresence>
             </div>
 
+            <motion.div
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+            >
+                <Button
+                    type="button"
+                    variant="primary"
+                    className="w-full h-11 rounded-xl font-bold shadow-md shadow-[var(--theme-color)]/10 hover:shadow-lg hover:shadow-[var(--theme-color)]/15 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                    onClick={() =>
+                        append({
+                            id: crypto.randomUUID(),
+                            platform: "instagram",
+                            username: "",
+                            followers: 0,
+                            engagementRate: 0,
+                        })
+                    }
+                >
+                    <Plus className="mr-2 h-4 w-4 stroke-[2.5]" />
+                    Add Platform Profile
+                </Button>
+            </motion.div>
         </div>
     );
 }

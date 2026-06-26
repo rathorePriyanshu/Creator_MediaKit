@@ -20,10 +20,10 @@ export const useCreatorKitStore = create<CreatorKitStore>((set) => ({
     isSaving: false,
     lastSavedAt: null,
 
-    setCreatorKit: (creatorKit) =>
-        set({
-            creatorKit,
-        }),
+    setCreatorKit: (creatorKit) => {
+        const clonedKit = JSON.parse(JSON.stringify(creatorKit));
+        set({ creatorKit: clonedKit });
+    },
     setSavingStatus: (status) =>
         set({
             isSaving: status,

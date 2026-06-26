@@ -20,26 +20,23 @@ export default function PreviewRateCards({
 }: PreviewRateCardsProps) {
     if (!rateCards.length) {
         return (
-            <section>
-
-                <h2 className="mb-6 text-2xl font-bold">
+            <section className="py-2">
+                <h2 className="mb-6 text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-[var(--theme-color)]" />
                     Commercial Packages
                 </h2>
 
-                <div className="rounded-xl border border-dashed border-zinc-700 py-12 text-center text-zinc-500">
-
-                    No commercial packages available.
-
+                <div className="rounded-2xl border border-dashed border-zinc-800 py-12 text-center text-zinc-500 bg-zinc-950/20">
+                    No commercial packages available yet.
                 </div>
-
             </section>
         );
     }
 
     return (
-        <section>
-
-            <h2 className="mb-6 text-2xl font-bold">
+        <section className="py-2">
+            <h2 className="mb-6 text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[var(--theme-color)]" />
                 Commercial Packages
             </h2>
 
@@ -52,93 +49,60 @@ export default function PreviewRateCards({
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            whileHover={{ y: -2, transition: { duration: 0.2, ease: "easeOut" } }}
+                            whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
                             transition={{ duration: 0.25, ease: "easeOut" }}
-                            className="
-              rounded-xl
-              border
-              border-zinc-800
-              bg-zinc-950
-              transition-all
-              duration-300
-              hover:border-indigo-500/50
-              hover:shadow-lg
-              hover:shadow-indigo-500/10
-            "
+                            className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/40 p-6 hover:border-zinc-700/80 hover:bg-zinc-950/60 transition-all duration-300 hover:shadow-xl hover:shadow-[var(--theme-color)]/5 border-l-4"
+                            style={{ borderLeftColor: "var(--theme-color)" }}
                         >
-
-                            {/* Header */}
-
-                            <div className="flex items-center justify-between border-b border-zinc-800 p-5">
-
-                                <div>
-
-                                    <h3 className="text-lg font-semibold text-white">
+                            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
+                                <div className="flex-1 space-y-2">
+                                    <h3 className="text-lg font-bold text-white tracking-tight">
                                         {card.deliverable}
                                     </h3>
-
-                                    <p className="mt-2 text-sm text-zinc-400">
+                                    <p className="text-sm text-zinc-400 leading-relaxed font-medium">
                                         {card.description}
                                     </p>
-
                                 </div>
 
-                                <div className="rounded-xl bg-indigo-600 px-5 py-3 text-center text-white">
-
-                                    <div className="flex items-center justify-center gap-1">
-
-                                        <BadgeIndianRupee className="h-4 w-4" />
-
-                                        <motion.span
-                                            key={card.basePrice}
-                                            initial={{ opacity: 0.5, y: -2 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.2, ease: "easeOut" }}
-                                            className="text-xl font-bold inline-block"
-                                        >
-                                            {formatPrice(card.basePrice)}
-                                        </motion.span>
-
+                                <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-3 shrink-0">
+                                    {/* Price Badge */}
+                                    <div className="rounded-xl bg-[var(--theme-color)] px-4 py-2 text-center text-white shadow-lg shadow-[var(--theme-color)]/15 border border-[var(--theme-color)]/30">
+                                        <div className="flex items-center justify-center gap-1">
+                                            <span className="text-xs font-semibold text-white/80">₹</span>
+                                            <motion.span
+                                                key={card.basePrice}
+                                                initial={{ opacity: 0.5, y: -2 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                                className="text-lg font-extrabold tracking-tight inline-block"
+                                            >
+                                                {formatPrice(card.basePrice)}
+                                            </motion.span>
+                                        </div>
                                     </div>
 
+                                    {/* Delivery Badge */}
+                                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-400 uppercase tracking-wider bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-lg">
+                                        <Clock3 className="h-3.5 w-3.5 text-[var(--theme-color)]" />
+                                        <span>
+                                            <motion.span
+                                                key={card.turnaroundDays}
+                                                initial={{ opacity: 0.5, y: -2 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                                className="inline-block"
+                                            >
+                                                {card.turnaroundDays}{" "}
+                                                {card.turnaroundDays === 1 ? "Day" : "Days"}
+                                            </motion.span>
+                                        </span>
+                                    </div>
                                 </div>
-
                             </div>
-
-                            {/* Footer */}
-
-                            <div className="flex items-center justify-between px-5 py-4 text-sm text-zinc-400">
-
-                                <div className="flex items-center gap-2">
-
-                                    <Clock3 className="h-4 w-4" />
-
-                                    Delivery
-
-                                </div>
-
-                                <span className="font-medium">
-                                    <motion.span
-                                        key={card.turnaroundDays}
-                                        initial={{ opacity: 0.5, y: -2 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="inline-block"
-                                    >
-                                        {card.turnaroundDays}{" "}
-                                        {card.turnaroundDays === 1
-                                            ? "Day"
-                                            : "Days"}
-                                    </motion.span>
-                                </span>
-
-                            </div>
-
                         </motion.div>
                     ))}
                 </AnimatePresence>
             </div>
-
         </section>
     );
 }

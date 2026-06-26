@@ -10,7 +10,6 @@ import { CreatorKitInput } from "@/lib/validations";
 
 export default function ProfileImageUpload() {
     const inputRef = useRef<HTMLInputElement>(null);
-
     const { control, setError, clearErrors } = useFormContext<CreatorKitInput>();
 
     return (
@@ -18,32 +17,40 @@ export default function ProfileImageUpload() {
             control={control}
             name="profile.profileImageUrl"
             render={({ field }) => (
-                <FormItem>
-
-                    <FormLabel>Profile Photo</FormLabel>
+                <FormItem className="space-y-3">
+                    <FormLabel className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                        Profile Photo
+                    </FormLabel>
 
                     <FormControl>
-
-                        <div className="space-y-4">
-
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
                             <div
                                 onClick={() => inputRef.current?.click()}
-                                className="relative aspect-square w-36 cursor-pointer overflow-hidden rounded-xl border-2 border-dashed border-zinc-700 bg-zinc-900 transition hover:border-indigo-500">
+                                className="relative aspect-square w-40 cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-zinc-800 bg-zinc-950/40 transition-all duration-300 hover:border-[var(--theme-color)] hover:bg-zinc-950/70 hover:shadow-xl hover:shadow-[var(--theme-color)]/5 group"
+                            >
                                 {field.value ? (
-                                    <Image
-                                        src={field.value}
-                                        alt="Profile"
-                                        fill
-                                        className="object-cover"
-                                        unoptimized
-                                    />
+                                    <>
+                                        <Image
+                                            src={field.value}
+                                            alt="Profile"
+                                            fill
+                                            className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-[1px]"
+                                            unoptimized
+                                        />
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100 gap-1.5 text-white">
+                                            <Camera className="h-6 w-6 transform translate-y-1 transition-transform duration-300 group-hover:translate-y-0" />
+                                            <span className="text-[10px] font-bold tracking-wider uppercase">Change Photo</span>
+                                        </div>
+                                    </>
                                 ) : (
-                                    <div className="flex h-full flex-col items-center justify-center gap-2 text-zinc-500">
-                                        <Camera className="h-8 w-8" />
-                                        <p className="text-xs">
-                                            Upload Photo
-                                        </p>
-
+                                    <div className="flex h-full flex-col items-center justify-center gap-2.5 text-zinc-500 transition-colors duration-300 group-hover:text-zinc-300 p-4 text-center">
+                                        <div className="p-3 rounded-full bg-zinc-900/60 border border-zinc-800 group-hover:bg-zinc-900 group-hover:border-zinc-700 transition-colors duration-300">
+                                            <Camera className="h-6 w-6 text-zinc-400 group-hover:text-[var(--theme-color)] transition-colors duration-300" />
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <p className="text-xs font-semibold">Upload Photo</p>
+                                            <p className="text-[10px] text-zinc-600 mt-0.5">JPG, PNG up to 2MB</p>
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -66,7 +73,6 @@ export default function ProfileImageUpload() {
                                         return;
                                     }
 
-
                                     const maxSizeBytes = 2 * 1024 * 1024;
                                     if (file.size > maxSizeBytes) {
                                         setError("profile.profileImageUrl", {
@@ -86,16 +92,22 @@ export default function ProfileImageUpload() {
                                 }}
                             />
 
-                            <Button
-                                type="button"
-                                onClick={() => inputRef.current?.click()}
-                            >
-                                Choose Image
-                            </Button>
-
+                            <div className="flex flex-col gap-2">
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => inputRef.current?.click()}
+                                    className="text-xs font-semibold h-10 px-4 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-800 transition-all duration-200 active:scale-[0.98]"
+                                >
+                                    Choose Image
+                                </Button>
+                                <p className="text-[11px] text-zinc-500 font-medium">
+                                    Supports PNG, JPEG or GIF formats. Maximum file size 2MB.
+                                </p>
+                            </div>
                         </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs text-red-400 font-medium" />
                 </FormItem>
             )}
         />

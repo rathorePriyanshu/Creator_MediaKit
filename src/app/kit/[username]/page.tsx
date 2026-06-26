@@ -47,11 +47,15 @@ export default async function PublicKitPage({
     rateCards: response.data.rateCards,
   };
 
-  console.log("creator", creator);
 
   return (
-    <main className="min-h-screen bg-[#0d0d12] py-12">
-      <div className="mx-auto max-w-6xl px-6">
+    <main className="min-h-screen bg-[#0d0d12] py-16 relative overflow-hidden">
+      {/* Dynamic background glow matching creator branding */}
+      <div
+        className="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 h-[450px] w-[450px] opacity-20 blur-[140px] rounded-full"
+        style={{ backgroundColor: creator.profile.themeColor || "#6366F1" }}
+      />
+      <div className="mx-auto max-w-6xl px-6 relative z-10">
         <PublicPreview creator={creator} />
       </div>
     </main>

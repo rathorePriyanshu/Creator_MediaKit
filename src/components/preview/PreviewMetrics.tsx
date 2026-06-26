@@ -1,9 +1,8 @@
 "use client";
 
-import { Instagram, Youtube, Linkedin } from "lucide-react";
-import { SiX } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 import { MetricInput } from "@/lib/validations";
+import { PLATFORM_CONFIG } from "@/constants/platforms";
 
 interface PreviewMetricsProps {
     metrics: MetricInput[];
@@ -21,71 +20,35 @@ function formatFollowers(value: number) {
     return value.toString();
 }
 
-const platformConfig = {
-    instagram: {
-        label: "Instagram",
-        icon: Instagram,
-        accent: "from-pink-500 via-fuchsia-500 to-orange-400",
-        badge: "bg-pink-500/15 text-pink-400",
-    },
-
-    youtube: {
-        label: "YouTube",
-        icon: Youtube,
-        accent: "from-red-600 to-red-500",
-        badge: "bg-red-500/15 text-red-400",
-    },
-
-    linkedin: {
-        label: "LinkedIn",
-        icon: Linkedin,
-        accent: "from-sky-600 to-blue-500",
-        badge: "bg-sky-500/15 text-sky-400",
-    },
-
-    x: {
-        label: "X",
-        icon: SiX,
-        accent: "from-zinc-400 to-white",
-        badge: "bg-zinc-700 text-zinc-200",
-    },
-};
-
 export default function PreviewMetrics({
     metrics,
 }: PreviewMetricsProps) {
-    console.log(metrics);
     if (!metrics.length) {
         return (
-            <section>
-
-                <h2 className="mb-6 text-2xl font-bold">
+            <section className="py-2">
+                <h2 className="mb-6 text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-[var(--theme-color)]" />
                     Verified Metrics
                 </h2>
 
-                <div className="rounded-xl border border-dashed border-zinc-700 py-12 text-center text-zinc-500">
-
-                    No social metrics available.
-
+                <div className="rounded-2xl border border-dashed border-zinc-800 py-12 text-center text-zinc-500 bg-zinc-950/20">
+                    No social metrics available yet.
                 </div>
-
             </section>
         );
     }
 
     return (
-        <section>
-
-            <h2 className="mb-6 text-2xl font-bold">
+        <section className="py-2">
+            <h2 className="mb-6 text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[var(--theme-color)]" />
                 Verified Metrics
             </h2>
 
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2">
                 <AnimatePresence mode="popLayout">
                     {metrics.map((metric) => {
-                        const config =
-                            platformConfig[metric.platform];
-
+                        const config = PLATFORM_CONFIG[metric.platform];
                         const Icon = config.icon;
 
                         return (
@@ -95,99 +58,64 @@ export default function PreviewMetrics({
                                 initial={{ opacity: 0, scale: 0.95, y: 12 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: -12 }}
-                                whileHover={{ y: -2, transition: { duration: 0.2, ease: "easeOut" } }}
+                                whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
                                 transition={{ duration: 0.25, ease: "easeOut" }}
-                                className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10"
+                                className="overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/40 hover:border-zinc-700/80 hover:bg-zinc-950/60 transition-all duration-300 hover:shadow-xl hover:shadow-[var(--theme-color)]/5 flex flex-col justify-between"
                             >
+                                {/* Subtle top platform gradient line */}
+                                <div className={`h-[3px] bg-gradient-to-r ${config.cardGradient}`} />
 
-                                {/* Top */}
-
-                                <div
-                                    className={`bg-gradient-to-r ${config.accent} p-[1px]`}
-                                >
-                                    <div className="flex items-center justify-between bg-zinc-950 px-5 py-4">
-
+                                <div className="p-5 flex flex-col gap-4 flex-1">
+                                    {/* Header row */}
+                                    <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-
-                                            <Icon className="h-5 w-5" />
-
+                                            <div className={`flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br ${config.cardGradient} shadow-md`}>
+                                                <Icon className="h-4.5 w-4.5 text-white" />
+                                            </div>
                                             <div>
-
-                                                <p className="font-semibold">
+                                                <p className="text-sm font-bold text-white leading-none">
                                                     {config.label}
                                                 </p>
-
-                                                <p className="text-sm text-zinc-500">
+                                                <p className="text-[11px] text-zinc-500 font-medium mt-1">
                                                     @{metric.username}
                                                 </p>
-
                                             </div>
-
                                         </div>
 
-                                        <span
-                                            className={`rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}
-                                        >
+                                        {/* Engagement Badge */}
+                                        <span className="rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-[var(--theme-color)]/10 text-[var(--theme-color)] border border-[var(--theme-color)]/25">
+                                            {metric.engagementRate}% ENG
+                                        </span>
+                                    </div>
+
+                                    {/* Followers / Engagement divider details */}
+                                    <div className="pt-3 border-t border-zinc-800/50 flex items-baseline justify-between mt-auto">
+                                        <div>
+                                            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+                                                Audience Size
+                                            </p>
+                                            <p className="text-2xl font-extrabold text-white tracking-tight mt-0.5">
+                                                <motion.span
+                                                    key={metric.followers}
+                                                    initial={{ opacity: 0.5, y: -2 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.2, ease: "easeOut" }}
+                                                    className="inline-block"
+                                                >
+                                                    {formatFollowers(metric.followers)}
+                                                </motion.span>
+                                            </p>
+                                        </div>
+                                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
                                             Verified
                                         </span>
-
                                     </div>
                                 </div>
-
-                                {/* Body */}
-
-                                <div className="grid grid-cols-2 divide-x divide-zinc-800">
-
-                                    <div className="p-5">
-
-                                        <p className="text-sm text-zinc-500">
-                                            Followers
-                                        </p>
-
-                                        <p className="mt-2 text-2xl font-bold">
-                                            <motion.span
-                                                key={metric.followers}
-                                                initial={{ opacity: 0.5, y: -2 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.2, ease: "easeOut" }}
-                                                className="inline-block"
-                                            >
-                                                {formatFollowers(
-                                                    metric.followers
-                                                )}
-                                            </motion.span>
-                                        </p>
-
-                                    </div>
-
-                                    <div className="p-5">
-
-                                        <p className="text-sm text-zinc-500">
-                                            Engagement
-                                        </p>
-
-                                        <p className="mt-2 text-2xl font-bold">
-                                            <motion.span
-                                                key={metric.engagementRate}
-                                                initial={{ opacity: 0.5, y: -2 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.2, ease: "easeOut" }}
-                                                className="inline-block"
-                                            >
-                                                {metric.engagementRate}%
-                                            </motion.span>
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
                             </motion.div>
                         );
                     })}
                 </AnimatePresence>
             </div>
-
         </section>
     );
 }

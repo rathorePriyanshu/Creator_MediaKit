@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect } from "react";
-import { FormProvider, useForm, useWatch } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreatorKitInput, CreatorKitSchema, } from "@/lib/validations";
 
@@ -23,9 +23,7 @@ export default function CreatorKitProvider({
         mode: "onChange",
     });
 
-    const values = useWatch({
-        control: methods.control,
-    });
+    const values = methods.watch();
 
     const setCreatorKit =
         useCreatorKitStore(
@@ -33,7 +31,10 @@ export default function CreatorKitProvider({
         );
 
     useEffect(() => {
-        setCreatorKit(values as CreatorKitInput);
+        const currentKit = useCreatorKitStore.getState().creatorKit;
+        if (JSON.stringify(currentKit) !== JSON.stringify(values)) {
+            setCreatorKit(values as CreatorKitInput);
+        }
     }, [values, setCreatorKit]);
 
     useAutosave(values as CreatorKitInput, methods.control);

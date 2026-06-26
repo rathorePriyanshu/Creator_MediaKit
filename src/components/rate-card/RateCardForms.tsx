@@ -8,49 +8,22 @@ import RateCardItem from "./RateCardItem";
 import { CreatorKitInput } from "@/lib/validations";
 
 export default function RateCardsForm() {
-    const { control } =
-        useFormContext<CreatorKitInput>();
+    const { control } = useFormContext<CreatorKitInput>();
 
-    const { fields, append, remove } =
-        useFieldArray({
-            control,
-            name: "rateCards",
-        });
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "rateCards",
+        keyName: "fieldId",
+    });
 
     return (
-        <div className="space-y-5">
-
-            <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-            >
-                <Button
-                    type="button"
-                    className="w-full"
-                    onClick={() =>
-                        append({
-                            id: crypto.randomUUID(),
-                            deliverable: "",
-                            description: "",
-                            basePrice: 0,
-                            turnaroundDays: 1,
-                        })
-                    }
-                >
-                    <Plus className="mr-2 h-4 w-4" />
-
-                    Add Package
-
-                </Button>
-            </motion.div>
-
+        <div className="space-y-6">
             <div className="space-y-5 flex flex-col">
                 <AnimatePresence mode="popLayout">
                     {fields.map((field, index) => (
                         <motion.div
                             layout
-                            key={field.id}
+                            key={field.fieldId}
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
@@ -65,6 +38,29 @@ export default function RateCardsForm() {
                 </AnimatePresence>
             </div>
 
+            <motion.div
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+            >
+                <Button
+                    type="button"
+                    variant="primary"
+                    className="w-full h-11 rounded-xl font-bold shadow-md shadow-[var(--theme-color)]/10 hover:shadow-lg hover:shadow-[var(--theme-color)]/15 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                    onClick={() =>
+                        append({
+                            id: crypto.randomUUID(),
+                            deliverable: "",
+                            description: "",
+                            basePrice: 0,
+                            turnaroundDays: 1,
+                        })
+                    }
+                >
+                    <Plus className="mr-2 h-4 w-4 stroke-[2.5]" />
+                    Add Package Tier
+                </Button>
+            </motion.div>
         </div>
     );
 }
