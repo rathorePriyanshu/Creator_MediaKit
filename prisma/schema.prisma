@@ -6,3 +6,21 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model CreatorKit {
+  id              String  @id @default(uuid()) @db.Uuid
+  username        String  @unique @db.VarChar(50)
+  fullName        String  @map("full_name") @db.VarChar(100)
+  bio             String? @db.Text
+  profileImageUrl String? @map("profile_image_url") @db.Text
+
+  themeColor String @default("#6366F1") @map("theme_color") @db.VarChar(7)
+
+  metrics   Json @default("[]")
+  rateCards Json @default("[]") @map("rate_cards")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("creator_kits")
+}
