@@ -1,6 +1,7 @@
 "use client";
 
 import { BadgeIndianRupee, Clock3 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { RateCardInput } from "@/lib/validations";
 
@@ -43,12 +44,17 @@ export default function PreviewRateCards({
             </h2>
 
             <div className="space-y-5">
-
-                {rateCards.map((card) => (
-
-                    <div
-                        key={card.id}
-                        className="
+                <AnimatePresence mode="popLayout">
+                    {rateCards.map((card) => (
+                        <motion.div
+                            layout
+                            key={card.id}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            whileHover={{ y: -2, transition: { duration: 0.2, ease: "easeOut" } }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            className="
               rounded-xl
               border
               border-zinc-800
@@ -59,69 +65,78 @@ export default function PreviewRateCards({
               hover:shadow-lg
               hover:shadow-indigo-500/10
             "
-                    >
+                        >
 
-                        {/* Header */}
+                            {/* Header */}
 
-                        <div className="flex items-center justify-between border-b border-zinc-800 p-5">
+                            <div className="flex items-center justify-between border-b border-zinc-800 p-5">
 
-                            <div>
+                                <div>
 
-                                <h3 className="text-lg font-semibold text-white">
-                                    {card.deliverable}
-                                </h3>
+                                    <h3 className="text-lg font-semibold text-white">
+                                        {card.deliverable}
+                                    </h3>
 
-                                <p className="mt-2 text-sm text-zinc-400">
-                                    {card.description}
-                                </p>
+                                    <p className="mt-2 text-sm text-zinc-400">
+                                        {card.description}
+                                    </p>
 
-                            </div>
+                                </div>
 
-                            <div className="rounded-xl bg-indigo-600 px-5 py-3 text-center text-white">
+                                <div className="rounded-xl bg-indigo-600 px-5 py-3 text-center text-white">
 
-                                <div className="flex items-center justify-center gap-1">
+                                    <div className="flex items-center justify-center gap-1">
 
-                                    <BadgeIndianRupee className="h-4 w-4" />
+                                        <BadgeIndianRupee className="h-4 w-4" />
 
-                                    <span className="text-xl font-bold">
+                                        <motion.span
+                                            key={card.basePrice}
+                                            initial={{ opacity: 0.5, y: -2 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.2, ease: "easeOut" }}
+                                            className="text-xl font-bold inline-block"
+                                        >
+                                            {formatPrice(card.basePrice)}
+                                        </motion.span>
 
-                                        {formatPrice(card.basePrice)}
-
-                                    </span>
+                                    </div>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                            {/* Footer */}
 
-                        {/* Footer */}
+                            <div className="flex items-center justify-between px-5 py-4 text-sm text-zinc-400">
 
-                        <div className="flex items-center justify-between px-5 py-4 text-sm text-zinc-400">
+                                <div className="flex items-center gap-2">
 
-                            <div className="flex items-center gap-2">
+                                    <Clock3 className="h-4 w-4" />
 
-                                <Clock3 className="h-4 w-4" />
+                                    Delivery
 
-                                Delivery
+                                </div>
+
+                                <span className="font-medium">
+                                    <motion.span
+                                        key={card.turnaroundDays}
+                                        initial={{ opacity: 0.5, y: -2 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
+                                        className="inline-block"
+                                    >
+                                        {card.turnaroundDays}{" "}
+                                        {card.turnaroundDays === 1
+                                            ? "Day"
+                                            : "Days"}
+                                    </motion.span>
+                                </span>
 
                             </div>
 
-                            <span className="font-medium">
-
-                                {card.turnaroundDays}{" "}
-                                {card.turnaroundDays === 1
-                                    ? "Day"
-                                    : "Days"}
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                ))}
-
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             </div>
 
         </section>

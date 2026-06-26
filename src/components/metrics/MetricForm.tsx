@@ -3,6 +3,7 @@
 import { Plus } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import MetricCard from "./MetricCard";
 import { CreatorKitInput } from "@/lib/validations";
 
@@ -19,34 +20,50 @@ export default function MetricsForm() {
     return (
         <div className="space-y-5">
 
-            <Button
-                type="button"
-                className="w-full"
-                onClick={() =>
-                    append({
-                        id: crypto.randomUUID(),
-                        platform: "instagram",
-                        username: "",
-                        followers: 0,
-                        engagementRate: 0,
-                    })
-                }
+            <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
             >
-                <Plus className="mr-2 h-4 w-4" />
+                <Button
+                    type="button"
+                    className="w-full"
+                    onClick={() =>
+                        append({
+                            id: crypto.randomUUID(),
+                            platform: "instagram",
+                            username: "",
+                            followers: 0,
+                            engagementRate: 0,
+                        })
+                    }
+                >
+                    <Plus className="mr-2 h-4 w-4" />
 
-                Add Platform
+                    Add Platform
 
-            </Button>
+                </Button>
+            </motion.div>
 
-            {fields.map((field, index) => (
-
-                <MetricCard
-                    key={field.id}
-                    index={index}
-                    remove={remove}
-                />
-
-            ))}
+            <div className="space-y-5 flex flex-col">
+                <AnimatePresence mode="popLayout">
+                    {fields.map((field, index) => (
+                        <motion.div
+                            layout
+                            key={field.id}
+                            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: -12 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                        >
+                            <MetricCard
+                                index={index}
+                                remove={remove}
+                            />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </div>
 
         </div>
     );

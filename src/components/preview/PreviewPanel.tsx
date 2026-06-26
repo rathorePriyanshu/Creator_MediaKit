@@ -7,7 +7,7 @@ import { useCreatorKit } from "@/hooks/useCreatorKit";
 import SaveStatus from "../status/SaveStatus";
 
 export default function PreviewPanel() {
-  const { creatorKit, isSaving, lastSavedAt } = useCreatorKit();
+  const { creatorKit } = useCreatorKit();
   const { profile, metrics, rateCards } = creatorKit;
 
   function formatFollowers(value: number | null | undefined) {

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { CreatorProfileInput } from "@/lib/validations";
 
 interface PreviewProfileProps {
@@ -11,7 +12,12 @@ export default function PreviewProfile({
     profile,
 }: PreviewProfileProps) {
     return (
-        <section className="flex flex-col items-center text-center">
+        <motion.section
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="flex flex-col items-center text-center"
+        >
 
             {/* Avatar */}
 
@@ -39,28 +45,44 @@ export default function PreviewProfile({
 
             {/* Name */}
 
-            <h1 className="text-3xl font-bold text-white">
+            <motion.h1
+                key={profile.fullName}
+                initial={{ opacity: 0.5, y: -2 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="text-3xl font-bold text-white"
+            >
                 {profile.fullName}
-            </h1>
+            </motion.h1>
 
             {/* Username */}
 
-            <p
+            <motion.p
+                key={profile.username}
+                initial={{ opacity: 0.5, y: -2 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className="mt-2 text-lg font-medium"
                 style={{
                     color: profile.themeColor || "#6366F1",
                 }}
             >
                 @{profile.username}
-            </p>
+            </motion.p>
 
             {/* Bio */}
 
             {profile.bio && (
-                <p className="mt-6 max-w-2xl whitespace-pre-line text-base leading-7 text-zinc-300">
+                <motion.p
+                    key={profile.bio}
+                    initial={{ opacity: 0.5, y: -2 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="mt-6 max-w-2xl whitespace-pre-line text-base leading-7 text-zinc-300"
+                >
                     {profile.bio}
-                </p>
+                </motion.p>
             )}
-        </section>
+        </motion.section>
     );
 }

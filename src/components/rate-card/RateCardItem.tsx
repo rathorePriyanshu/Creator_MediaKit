@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { NumberInput } from "@/components/form/NumberInput";
+import { motion } from "framer-motion";
 import { CreatorKitInput } from "@/lib/validations";
 
 interface Props {
@@ -31,12 +32,18 @@ export default function RateCardItem({
                     Package #{index + 1}
                 </h3>
 
-                <Button
-                    type="button"
-                    onClick={() => remove(index)}
+                <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
                 >
-                    <Trash2 className="h-4 w-4" />
-                </Button>
+                    <Button
+                        type="button"
+                        onClick={() => remove(index)}
+                    >
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                </motion.div>
 
             </div>
 

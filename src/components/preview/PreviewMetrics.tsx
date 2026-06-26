@@ -2,6 +2,7 @@
 
 import { Instagram, Youtube, Linkedin } from "lucide-react";
 import { SiX } from "react-icons/si";
+import { motion, AnimatePresence } from "framer-motion";
 import { MetricInput } from "@/lib/validations";
 
 interface PreviewMetricsProps {
@@ -80,89 +81,111 @@ export default function PreviewMetrics({
             </h2>
 
             <div className="grid gap-5 md:grid-cols-2">
+                <AnimatePresence mode="popLayout">
+                    {metrics.map((metric) => {
+                        const config =
+                            platformConfig[metric.platform];
 
-                {metrics.map((metric) => {
-                    const config =
-                        platformConfig[metric.platform];
+                        const Icon = config.icon;
 
-                    const Icon = config.icon;
-
-                    return (
-                        <div
-                            key={metric.id}
-                            className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950"
-                        >
-
-                            {/* Top */}
-
-                            <div
-                                className={`bg-gradient-to-r ${config.accent} p-[1px]`}
+                        return (
+                            <motion.div
+                                layout
+                                key={metric.id}
+                                initial={{ opacity: 0, scale: 0.95, y: 12 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: -12 }}
+                                whileHover={{ y: -2, transition: { duration: 0.2, ease: "easeOut" } }}
+                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10"
                             >
-                                <div className="flex items-center justify-between bg-zinc-950 px-5 py-4">
 
-                                    <div className="flex items-center gap-3">
+                                {/* Top */}
 
-                                        <Icon className="h-5 w-5" />
+                                <div
+                                    className={`bg-gradient-to-r ${config.accent} p-[1px]`}
+                                >
+                                    <div className="flex items-center justify-between bg-zinc-950 px-5 py-4">
 
-                                        <div>
+                                        <div className="flex items-center gap-3">
 
-                                            <p className="font-semibold">
-                                                {config.label}
-                                            </p>
+                                            <Icon className="h-5 w-5" />
 
-                                            <p className="text-sm text-zinc-500">
-                                                @{metric.username}
-                                            </p>
+                                            <div>
+
+                                                <p className="font-semibold">
+                                                    {config.label}
+                                                </p>
+
+                                                <p className="text-sm text-zinc-500">
+                                                    @{metric.username}
+                                                </p>
+
+                                            </div>
 
                                         </div>
 
+                                        <span
+                                            className={`rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}
+                                        >
+                                            Verified
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                {/* Body */}
+
+                                <div className="grid grid-cols-2 divide-x divide-zinc-800">
+
+                                    <div className="p-5">
+
+                                        <p className="text-sm text-zinc-500">
+                                            Followers
+                                        </p>
+
+                                        <p className="mt-2 text-2xl font-bold">
+                                            <motion.span
+                                                key={metric.followers}
+                                                initial={{ opacity: 0.5, y: -2 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                                className="inline-block"
+                                            >
+                                                {formatFollowers(
+                                                    metric.followers
+                                                )}
+                                            </motion.span>
+                                        </p>
+
                                     </div>
 
-                                    <span
-                                        className={`rounded-full px-3 py-1 text-xs font-semibold ${config.badge}`}
-                                    >
-                                        Verified
-                                    </span>
+                                    <div className="p-5">
 
-                                </div>
-                            </div>
+                                        <p className="text-sm text-zinc-500">
+                                            Engagement
+                                        </p>
 
-                            {/* Body */}
+                                        <p className="mt-2 text-2xl font-bold">
+                                            <motion.span
+                                                key={metric.engagementRate}
+                                                initial={{ opacity: 0.5, y: -2 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                                className="inline-block"
+                                            >
+                                                {metric.engagementRate}%
+                                            </motion.span>
+                                        </p>
 
-                            <div className="grid grid-cols-2 divide-x divide-zinc-800">
-
-                                <div className="p-5">
-
-                                    <p className="text-sm text-zinc-500">
-                                        Followers
-                                    </p>
-
-                                    <p className="mt-2 text-2xl font-bold">
-                                        {formatFollowers(
-                                            metric.followers
-                                        )}
-                                    </p>
+                                    </div>
 
                                 </div>
 
-                                <div className="p-5">
-
-                                    <p className="text-sm text-zinc-500">
-                                        Engagement
-                                    </p>
-
-                                    <p className="mt-2 text-2xl font-bold">
-                                        {metric.engagementRate}%
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    );
-                })}
-
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
             </div>
 
         </section>

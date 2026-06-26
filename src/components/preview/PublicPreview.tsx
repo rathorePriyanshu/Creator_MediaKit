@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 
 import PreviewProfile from "./PreviewProfile";
@@ -35,29 +36,47 @@ export default function PublicPreview({
 
             {/* Profile */}
 
-            <Card className="border-zinc-800 bg-zinc-900 p-8">
+            <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="transition-shadow duration-300 hover:shadow-2xl hover:shadow-indigo-500/5"
+            >
+                <Card className="border-zinc-800 bg-zinc-900 p-8">
 
-                <PreviewProfile profile={creator.profile} />
+                    <PreviewProfile profile={creator.profile} />
 
-            </Card>
+                </Card>
+            </motion.div>
 
             {/* Metrics */}
 
-            <Card className="border-zinc-800 bg-zinc-900 p-8">
+            <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="transition-shadow duration-300 hover:shadow-2xl hover:shadow-indigo-500/5"
+            >
+                <Card className="border-zinc-800 bg-zinc-900 p-8">
 
-                <PreviewMetrics metrics={creator.metrics} />
+                    <PreviewMetrics metrics={creator.metrics} />
 
-            </Card>
+                </Card>
+            </motion.div>
 
             {/* Rate Cards */}
 
-            <Card className="border-zinc-800 bg-zinc-900 p-8">
+            <motion.div
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="transition-shadow duration-300 hover:shadow-2xl hover:shadow-indigo-500/5"
+            >
+                <Card className="border-zinc-800 bg-zinc-900 p-8">
 
-                <PreviewRateCards
-                    rateCards={creator.rateCards}
-                />
+                    <PreviewRateCards
+                        rateCards={creator.rateCards}
+                    />
 
-            </Card>
+                </Card>
+            </motion.div>
 
         </section>
     );
