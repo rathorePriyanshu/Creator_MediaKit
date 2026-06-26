@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import ProfileForm from "@/components/profile/ProfileForm";
 import MetricsForm from "../metrics/MetricForm";
+import RateCardsForm from "../rate-card/RateCardForms";
 
 export default function EditorPanel() {
   return (
@@ -70,21 +71,25 @@ export default function EditorPanel() {
 
       <Card className="border-zinc-800 bg-zinc-900 p-6">
 
-        <div className="mb-4 flex items-center gap-3">
+        <div className="mb-6 flex items-center gap-3">
 
           <BadgeIndianRupee className="h-5 w-5 text-indigo-400" />
 
-          <h2 className="font-semibold">
-            Commercial Rate Cards
-          </h2>
+          <div>
+
+            <h2 className="text-lg font-semibold">
+              Commercial Rate Cards
+            </h2>
+
+            <p className="text-xs text-zinc-500">
+              Create pricing packages for brands.
+            </p>
+
+          </div>
 
         </div>
 
-        <div className="rounded-md border border-dashed border-zinc-700 py-8 text-center text-sm text-zinc-500">
-
-          Rate cards section coming next.
-
-        </div>
+        <RateCardsForm />
 
       </Card>
 

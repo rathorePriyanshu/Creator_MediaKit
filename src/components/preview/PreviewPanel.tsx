@@ -14,11 +14,15 @@ export default function PreviewPanel() {
     const safeVal = Math.max(0, value ?? 0);
 
     if (safeVal >= 1_000_000) {
-      return `${(safeVal / 1_000_000).toFixed(1)}M`;
+      const val = safeVal / 1_000_000;
+      const formatted = Math.floor(val * 10) / 10;
+      return formatted % 1 === 0 ? `${formatted.toFixed(0)}M` : `${formatted.toFixed(1)}M`;
     }
 
     if (safeVal >= 1000) {
-      return `${(safeVal / 1000).toFixed(1)}K`;
+      const val = safeVal / 1000;
+      const formatted = Math.floor(val * 10) / 10;
+      return formatted % 1 === 0 ? `${formatted.toFixed(0)}K` : `${formatted.toFixed(1)}K`;
     }
 
     return safeVal.toString();
@@ -137,14 +141,16 @@ export default function PreviewPanel() {
 
       <Card className="border-zinc-800 bg-zinc-900 p-6">
 
-        <h3 className="mb-4 text-lg font-semibold">
-          Commercial Rate Cards
+        <h3 className="mb-5 text-lg font-semibold">
+          Commercial Packages
         </h3>
 
         {rateCards.length === 0 ? (
-          <p className="text-sm text-zinc-500">
-            No commercial packages added yet.
-          </p>
+          <div className="rounded-lg border border-dashed border-zinc-700 p-8 text-center">
+            <p className="text-sm text-zinc-500">
+              Add your first package from the editor.
+            </p>
+          </div>
         ) : (
           <div className="space-y-4">
 
@@ -152,7 +158,7 @@ export default function PreviewPanel() {
 
               <div
                 key={card.id}
-                className="rounded-lg border border-zinc-700 bg-zinc-800 p-5"
+                className="rounded-xl border border-zinc-700 bg-zinc-800 p-5"
               >
 
                 <div className="flex items-center justify-between">
@@ -161,18 +167,19 @@ export default function PreviewPanel() {
                     {card.deliverable}
                   </h4>
 
-                  <span className="rounded-md bg-indigo-600 px-3 py-1 text-sm font-semibold">
-                    ₹{card.basePrice}
-                  </span>
+                  <div className="rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white">
+                    ₹{Math.max(0, card.basePrice ?? 0).toLocaleString("en-IN")}
+                  </div>
 
                 </div>
 
-                <p className="mt-3 text-sm text-zinc-400">
+                <p className="mt-4 text-sm text-zinc-400">
                   {card.description}
                 </p>
 
                 <p className="mt-4 text-xs text-zinc-500">
-                  Delivery in {card.turnaroundDays} day(s)
+                  Delivery: {Math.max(1, card.turnaroundDays ?? 1)} Day
+                  {Math.max(1, card.turnaroundDays ?? 1) > 1 ? "s" : ""}
                 </p>
 
               </div>

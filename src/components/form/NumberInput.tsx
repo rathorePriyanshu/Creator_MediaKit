@@ -73,7 +73,6 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     return (
       <Input
         type="number"
-        ref={ref}
         value={inputValue}
         onChange={handleChange}
         onBlur={handleBlur}
