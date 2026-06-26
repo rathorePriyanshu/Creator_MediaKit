@@ -1,13 +1,9 @@
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* ========= Assignment Theme ========= */
 
     --background: #0d0d12;
     --foreground: #ffffff;
@@ -39,7 +35,6 @@
 
     --radius: 0.75rem;
 
-    /* Sidebar */
 
     --sidebar: #18181b;
     --sidebar-foreground: #ffffff;
@@ -50,7 +45,6 @@
     --sidebar-border: #27272a;
     --sidebar-ring: #ffffff;
 
-    /* Optional future charts */
 
     --chart-1: #ffffff;
     --chart-2: #a1a1aa;

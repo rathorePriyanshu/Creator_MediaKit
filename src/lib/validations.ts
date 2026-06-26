@@ -18,24 +18,20 @@ export const CreatorProfileSchema = z.object({
             /^[a-zA-Z0-9_]+$/,
             "Username can only contain letters, numbers and underscores"
         ),
-
     fullName: z
         .string()
         .trim()
         .min(2)
         .max(100),
-
     bio: z
         .string()
         .trim()
         .max(500),
-
     profileImageUrl: z
         .string()
         .url()
         .optional()
         .or(z.literal("")),
-
     themeColor: z
         .string()
         .regex(/^#[0-9A-Fa-f]{6}$/),
@@ -44,15 +40,11 @@ export const CreatorProfileSchema = z.object({
 
 export const MetricSchema = z.object({
     id: z.string(),
-
     platform: PlatformSchema,
-
     username: z.string().trim().min(1),
-
     followers: z
         .number()
         .nonnegative(),
-
     engagementRate: z
         .number()
         .min(0)
@@ -87,9 +79,7 @@ export const RateCardSchema = z.object({
 
 export const CreatorKitSchema = z.object({
     profile: CreatorProfileSchema,
-
     metrics: z.array(MetricSchema),
-
     rateCards: z.array(RateCardSchema),
 });
 
