@@ -12,6 +12,8 @@ export default function PreviewPanel() {
   const { creatorKit } = useCreatorKit();
   const { profile, metrics, rateCards } = creatorKit;
 
+  console.log("debug metrics ====", metrics)
+
   function formatFollowers(value: number | null | undefined) {
     const safeVal = Math.max(0, value ?? 0);
 
@@ -87,7 +89,7 @@ export default function PreviewPanel() {
           Verified Metrics
         </h3>
 
-        {metrics.length === 0 ? (
+        {(metrics || []).length === 0 ? (
           <div className="rounded-2xl border border-dashed border-zinc-800 py-12 text-center text-zinc-500 bg-zinc-950/20">
             Add your first platform from the editor.
           </div>

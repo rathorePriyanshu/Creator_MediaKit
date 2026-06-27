@@ -1,29 +1,53 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import MetricCard from "./MetricCard";
-import { CreatorKitInput } from "@/lib/validations";
+import { MetricInput } from "@/lib/validations";
+import { useCreatorKitStore } from "@/store/creatorKitStore";
 
 export default function MetricsForm() {
-    const { control } = useFormContext<CreatorKitInput>();
+    const metrics = useCreatorKitStore((state) => state.creatorKit.metrics);
+    const setCreatorKit = useCreatorKitStore((state) => state.setCreatorKit);
+    const creatorKit = useCreatorKitStore((state) => state.creatorKit);
 
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "metrics",
-        keyName: "fieldId",
-    });
+    const handleAdd = () => {
+        const newMetric: MetricInput = {
+            id: crypto.randomUUID(),
+            platform: "instagram",
+            username: "",
+            followers: 0,
+            engagementRate: 0,
+        };
+        setCreatorKit({
+            ...creatorKit,
+            metrics: [...(metrics ?? []), newMetric],
+        });
+    };
+
+    const handleRemove = (id: string) => {
+        setCreatorKit({
+            ...creatorKit,
+            metrics: metrics.filter((m) => m.id !== id),
+        });
+    };
+
+    const handleChange = (id: string, updated: MetricInput) => {
+        setCreatorKit({
+            ...creatorKit,
+            metrics: metrics.map((m) => (m.id === id ? updated : m)),
+        });
+    };
 
     return (
         <div className="space-y-6">
             <div className="space-y-5 flex flex-col">
                 <AnimatePresence mode="popLayout">
-                    {fields.map((field, index) => (
+                    {metrics.map((metric, index) => (
                         <motion.div
                             layout
-                            key={field.fieldId}
+                            key={metric.id}
                             initial={{ opacity: 0, scale: 0.95, y: 12 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: -12 }}
@@ -31,7 +55,9 @@ export default function MetricsForm() {
                         >
                             <MetricCard
                                 index={index}
-                                remove={remove}
+                                metric={metric}
+                                onRemove={() => handleRemove(metric.id)}
+                                onChange={(updated) => handleChange(metric.id, updated)}
                             />
                         </motion.div>
                     ))}
@@ -47,15 +73,7 @@ export default function MetricsForm() {
                     type="button"
                     variant="primary"
                     className="w-full h-11 rounded-xl font-bold shadow-md shadow-[var(--theme-color)]/10 hover:shadow-lg hover:shadow-[var(--theme-color)]/15 transition-all duration-200 active:scale-[0.98] cursor-pointer"
-                    onClick={() =>
-                        append({
-                            id: crypto.randomUUID(),
-                            platform: "instagram",
-                            username: "",
-                            followers: 0,
-                            engagementRate: 0,
-                        })
-                    }
+                    onClick={handleAdd}
                 >
                     <Plus className="mr-2 h-4 w-4 stroke-[2.5]" />
                     Add Platform Profile

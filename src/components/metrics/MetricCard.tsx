@@ -1,26 +1,25 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { UseFieldArrayRemove, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { NumberInput } from "@/components/form/NumberInput";
 import { motion } from "framer-motion";
+import { MetricInput, PlatformSchema } from "@/lib/validations";
+import { PLATFORM_CONFIG } from "@/constants/platforms";
+import { Label } from "@/components/ui/label";
 import PlatformSelect from "./PlatformSelect";
-import { CreatorKitInput } from "@/lib/validations";
 
 interface MetricCardProps {
     index: number;
-    remove: UseFieldArrayRemove;
+    metric: MetricInput;
+    onRemove: () => void;
+    onChange: (updated: MetricInput) => void;
 }
 
-export default function MetricCard({
-    index,
-    remove,
-}: MetricCardProps) {
-    const { control, register } = useFormContext<CreatorKitInput>();
+export default function MetricCard({ index, metric, onRemove, onChange }: MetricCardProps) {
+    const platforms = PlatformSchema.options;
 
     return (
         <Card className="space-y-5 border-zinc-800 bg-zinc-950/30 p-5 sm:p-6 transition-all duration-300 hover:border-zinc-700/80 rounded-2xl relative shadow-lg shadow-black/5">
@@ -42,7 +41,7 @@ export default function MetricCard({
                     <Button
                         type="button"
                         variant="danger"
-                        onClick={() => remove(index)}
+                        onClick={onRemove}
                         className="h-8 w-8 p-0 rounded-lg bg-red-950/30 text-red-400 border border-red-900/40 hover:bg-red-600 hover:text-white transition-all duration-200"
                         title="Delete platform"
                     >
@@ -51,77 +50,82 @@ export default function MetricCard({
                 </motion.div>
             </div>
 
-            <PlatformSelect index={index} />
+            {/* Platform Select */}
+            <div className="space-y-2">
+                <Label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                    Platform
+                </Label>
+                <PlatformSelect
+                    value={metric.platform}
+                    onChange={(platform) => onChange({ ...metric, platform })}
+                />
+            </div>
+            {/* <div className="space-y-2">
+                <Label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                    Platform
+                </Label>
+                <select
+                    value={metric.platform}
+                    onChange={(e) =>
+                        onChange({ ...metric, platform: e.target.value as MetricInput["platform"] })
+                    }
+                    className="w-full h-11 rounded-xl border border-zinc-800/80 bg-zinc-950/60 px-4 text-sm font-medium text-white hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:outline-none transition-all duration-200"
+                >
+                    {platforms.map((p) => (
+                        <option key={p} value={p} className="bg-zinc-900">
+                            {PLATFORM_CONFIG[p]?.label ?? p}
+                        </option>
+                    ))}
+                </select>
+            </div> */}
 
-            <input
-                type="hidden"
-                {...register(`metrics.${index}.id`)}
-            />
-
-            <FormField
-                control={control}
-                name={`metrics.${index}.username`}
-                render={({ field }) => (
-                    <FormItem className="space-y-2">
-                        <FormLabel className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                            Username
-                        </FormLabel>
-                        <FormControl>
-                            <Input
-                                placeholder="creator_username"
-                                className="h-11 border border-zinc-800/80 bg-zinc-950/60 hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:ring-[var(--theme-color)]/20 focus:bg-zinc-950 px-4 text-sm font-medium transition-all duration-200 placeholder:text-zinc-600 rounded-xl"
-                                {...field}
-                            />
-                        </FormControl>
-                        <FormMessage className="text-xs text-red-400 font-medium" />
-                    </FormItem>
-                )}
-            />
+            {/* Username */}
+            <div className="space-y-2">
+                <Label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                    Username
+                </Label>
+                <Input
+                    value={metric.username}
+                    onChange={(e) => onChange({ ...metric, username: e.target.value })}
+                    placeholder="creator_username"
+                    className="h-11 border border-zinc-800/80 bg-zinc-950/60 hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:ring-[var(--theme-color)]/20 focus:bg-zinc-950 px-4 text-sm font-medium transition-all duration-200 placeholder:text-zinc-600 rounded-xl"
+                />
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <FormField
-                    control={control}
-                    name={`metrics.${index}.followers`}
-                    render={({ field }) => (
-                        <FormItem className="space-y-2">
-                            <FormLabel className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                                Followers
-                            </FormLabel>
-                            <FormControl>
-                                <NumberInput
-                                    min={0}
-                                    placeholder="0"
-                                    className="h-11 border border-zinc-800/80 bg-zinc-950/60 hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:ring-[var(--theme-color)]/20 focus:bg-zinc-950 px-4 text-sm font-medium transition-all duration-200 placeholder:text-zinc-600 rounded-xl"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage className="text-xs text-red-400 font-medium" />
-                        </FormItem>
-                    )}
-                />
+                {/* Followers */}
+                <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                        Followers
+                    </Label>
+                    <NumberInput
+                        value={metric.followers}
+                        onChange={(v) =>
+                            onChange({ ...metric, followers: v || 0 })
+                        }
+                        min={0}
+                        placeholder="0"
+                        className="h-11 border border-zinc-800/80 bg-zinc-950/60 hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:ring-[var(--theme-color)]/20 focus:bg-zinc-950 px-4 text-sm font-medium transition-all duration-200 placeholder:text-zinc-600 rounded-xl"
+                    />
+                </div>
 
-                <FormField
-                    control={control}
-                    name={`metrics.${index}.engagementRate`}
-                    render={({ field }) => (
-                        <FormItem className="space-y-2">
-                            <FormLabel className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                                Engagement %
-                            </FormLabel>
-                            <FormControl>
-                                <NumberInput
-                                    min={0}
-                                    max={100}
-                                    step="0.1"
-                                    placeholder="0.0"
-                                    className="h-11 border border-zinc-800/80 bg-zinc-950/60 hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:ring-[var(--theme-color)]/20 focus:bg-zinc-950 px-4 text-sm font-medium transition-all duration-200 placeholder:text-zinc-600 rounded-xl"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage className="text-xs text-red-400 font-medium" />
-                        </FormItem>
-                    )}
-                />
+                {/* Engagement Rate */}
+                <div className="space-y-2">
+                    <Label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+                        Engagement %
+                    </Label>
+                    <NumberInput
+                        value={metric.engagementRate}
+                        onChange={(v) =>
+                            onChange({ ...metric, engagementRate: v || 0 })
+                        }
+                        min={0}
+                        max={100}
+                        step="0.1"
+                        placeholder="0.0"
+                        className="h-11 border border-zinc-800/80 bg-zinc-950/60 hover:border-zinc-700/80 focus:border-[var(--theme-color)] focus:ring-[var(--theme-color)]/20 focus:bg-zinc-950 px-4 text-sm font-medium transition-all duration-200 placeholder:text-zinc-600 rounded-xl"
+                    />
+                </div>
             </div>
         </Card>
     );

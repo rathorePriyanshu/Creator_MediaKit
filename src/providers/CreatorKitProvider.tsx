@@ -1,43 +1,22 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreatorKitInput, CreatorKitSchema, } from "@/lib/validations";
-
+import { CreatorKitInput, CreatorKitSchema } from "@/lib/validations";
 import { DEFAULT_CREATOR_KIT } from "@/constants/defaults";
-import { useCreatorKitStore } from "@/store/creatorKitStore";
 import { useAutosave } from "@/hooks/useAutosave";
 
-interface CreatorKitProviderProps {
-    children: ReactNode;
-}
-
-export default function CreatorKitProvider({
-    children,
-}: CreatorKitProviderProps) {
-
+export default function CreatorKitProvider({ children }: { children: ReactNode }) {
     const methods = useForm<CreatorKitInput>({
         resolver: zodResolver(CreatorKitSchema),
         defaultValues: DEFAULT_CREATOR_KIT,
         mode: "onChange",
     });
 
-    const values = methods.watch();
-
-    const setCreatorKit =
-        useCreatorKitStore(
-            state => state.setCreatorKit
-        );
-
-    useEffect(() => {
-        const currentKit = useCreatorKitStore.getState().creatorKit;
-        if (JSON.stringify(currentKit) !== JSON.stringify(values)) {
-            setCreatorKit(values as CreatorKitInput);
-        }
-    }, [values, setCreatorKit]);
-
-    useAutosave(values as CreatorKitInput, methods.control);
+    // metrics ab store se manage ho raha hai directly
+    // form sirf profile aur rateCards ke liye hai
+    useAutosave(methods.getValues(), methods.control);
 
     return (
         <FormProvider {...methods}>
