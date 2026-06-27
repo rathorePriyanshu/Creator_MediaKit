@@ -32,7 +32,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body
-        className="min-h-screen bg-background font-sans text-foreground antialiased"
+        className="bg-background font-sans text-foreground"
       >
         {children}
       </body>
