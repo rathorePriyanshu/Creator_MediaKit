@@ -59,13 +59,20 @@
     scroll-behavior: smooth;
   }
 
-  /* Desktop only: lock the document height so the two-panel viewport layout works.
-     On mobile/tablet the page must scroll naturally, so these rules are absent below lg. */
+
   @media (min-width: 1024px) {
+
     html,
     body {
       height: 100%;
       overflow: hidden;
+    }
+
+    /* Public kit pages pe override */
+    html:has(#public-kit-page),
+    body:has(#public-kit-page) {
+      overflow: auto;
+      height: auto;
     }
   }
 

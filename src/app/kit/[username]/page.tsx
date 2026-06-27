@@ -51,7 +51,7 @@ export default async function PublicKitPage({
 
 
   return (
-    <main className="min-h-screen bg-[#0d0d12] py-16 relative overflow-hidden">
+    <main id="public-kit-page" className="min-h-screen bg-[#0d0d12] py-16 relative overflow-y-auto">
       {/* Dynamic background glow matching creator branding */}
       <div
         className="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 h-[450px] w-[450px] opacity-20 blur-[140px] rounded-full"

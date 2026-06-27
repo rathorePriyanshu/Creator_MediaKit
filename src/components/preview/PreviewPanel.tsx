@@ -12,8 +12,6 @@ export default function PreviewPanel() {
   const { creatorKit } = useCreatorKit();
   const { profile, metrics, rateCards } = creatorKit;
 
-  console.log("debug metrics ====", metrics)
-
   function formatFollowers(value: number | null | undefined) {
     const safeVal = Math.max(0, value ?? 0);
 
